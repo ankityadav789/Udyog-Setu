@@ -1,0 +1,54 @@
+
+> billing-app@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Lenovo\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\package-lock.json
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.6s
+  Running TypeScript ...
+  Finished TypeScript in 6.6s ...
+  Collecting page data using 14 workers ...
+Error [PrismaClientInitializationError]: `PrismaClient` needs to be constructed with a non-empty, valid `PrismaClientOptions`:
+
+```
+new PrismaClient({
+  ...
+})
+```
+
+or
+
+```
+constructor() {
+  super({ ... });
+}
+```
+          
+    at module evaluation (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[root-of-the-server]__09n.v.k._.js:1:1159)
+    at instantiateModule (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:853:9)
+    at getOrInstantiateModuleFromParent (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:877:12)
+    at Context.esmImport [as i] (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:281:20)
+    at module evaluation (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[root-of-the-server]__09n.v.k._.js:1:1479)
+    at instantiateModule (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:853:9)
+    at instantiateRuntimeModule (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:882:12)
+    at getOrInstantiateRuntimeModule (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:895:12)
+    at Object.m (C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\.next\server\chunks\[turbopack]_runtime.js:898:18) {
+  clientVersion: '7.5.0',
+  errorCode: undefined,
+  retryable: undefined
+}
+
+> Build error occurred
+Error: Failed to collect page data for /api/products
+    at ignore-listed frames {
+  type: 'Error'
+}

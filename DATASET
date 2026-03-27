@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Red valvet cake",
+    "price": "500",
+    "category": "Baked Goods",
+    "stockQuantity": 20
+  },
+  {
+    "name": "Vanilla With Chocolate ",
+    "price": "250",
+    "category": "Baked Goods",
+    "stockQuantity": 15
+  },
+  {
+    "name": "Chocho lava cake ",
+    "price": "299",
+    "category": "Baked Goods",
+    "stockQuantity": 15
+  }
+]

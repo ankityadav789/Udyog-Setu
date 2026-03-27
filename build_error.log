@@ -1,0 +1,120 @@
+
+> billing-app@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Lenovo\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\package-lock.json
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/customers/[id]/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mPUT[0m(
+  [90m5 |[0m   request: [33mRequest[0m,
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/customers/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mGET[0m() {
+  [90m5 |[0m   [36mtry[0m {
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/dashboard/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mimport[0m { startOfDay, startOfWeek, startOfMonth } [36mfrom[0m [32m'date-fns'[0m;
+  [90m4 |[0m
+  [90m5 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mGET[0m(request: [33mRequest[0m) {
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/orders/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mPOST[0m(request: [33mRequest[0m) {
+  [90m5 |[0m   [36mtry[0m {
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/products/[id]/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mPUT[0m(
+  [90m5 |[0m   request: [33mRequest[0m,
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/products/route.ts:2:1
+Module not found: Can't resolve '@/lib/prisma'
+  [90m1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m'next/server'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { prisma } [36mfrom[0m [32m'@/lib/prisma'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mGET[0m() {
+  [90m5 |[0m   [36mtry[0m {
+
+Import map: aliased to relative './src/lib/prisma' inside of [project]/OneDrive/Desktop/BillingSystem/billing-app
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/customers/[id]/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/customers/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/dashboard/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/orders/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/products/[id]/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./OneDrive/Desktop/BillingSystem/billing-app/src/app/api/products/route.ts:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

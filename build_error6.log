@@ -1,0 +1,28 @@
+
+> billing-app@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Lenovo\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\package-lock.json
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.7s
+  Running TypeScript ...
+Failed to type check.
+
+./src/lib/prisma.ts:1:10
+Type error: Module '"@prisma/client"' has no exported member 'PrismaClient'.
+
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mPrismaClient[0m } [36mfrom[0m [32m"@prisma/client"[0m;
+  [90m  |[0m          [31m[1m^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mconst[0m globalForPrisma = global [36mas[0m unknown [36mas[0m { prisma: [33mPrismaClient[0m };
+  [90m4 |[0m
+Next.js build worker exited with code: 1 and signal: null

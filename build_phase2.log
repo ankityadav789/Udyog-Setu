@@ -1,0 +1,30 @@
+
+> billing-app@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Lenovo\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Lenovo\OneDrive\Desktop\BillingSystem\billing-app\package-lock.json
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+Failed to type check.
+
+./src/app/api/profile/route.ts:6:34
+Type error: Property 'storeProfile' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+  [90m4 |[0m [36mexport[0m [36masync[0m [36mfunction[0m [33mGET[0m() {
+  [90m5 |[0m   [36mtry[0m {
+[31m[1m>[0m [90m6 |[0m     [36mconst[0m profile = [36mawait[0m prisma.storeProfile.findFirst();
+  [90m  |[0m                                  [31m[1m^[0m
+  [90m7 |[0m     [36mreturn[0m [33mNextResponse[0m.json(profile || { isOnboarded: [36mfalse[0m });
+  [90m8 |[0m   } [36mcatch[0m (error) {
+  [90m9 |[0m     console.error([32m"GET /api/profile error:"[0m, error);
+Next.js build worker exited with code: 1 and signal: null
