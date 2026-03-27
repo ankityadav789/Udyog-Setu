@@ -4,13 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     // 1. Using raw queries to bypass Prisma client schema cache entirely without requiring server restart
-    const profiles: any[] = await prisma.$queryRaw`SELECT * FROM StoreProfile LIMIT 1`;
-    const profile = profiles.length > 0 ? profiles[0] : null;
-    
-    // SQLite boolean 1/0 mapped to true/false
-    if (profile) {
-      profile.isOnboarded = profile.isOnboarded === 1;
-    }
+    const profile = await prisma.storeProfile.findFirst();
     
     return NextResponse.json(profile || { isOnboarded: false });
   } catch (error) {
@@ -24,26 +18,41 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { businessName, category } = body;
 
-    const existing: any[] = await prisma.$queryRaw`SELECT * FROM StoreProfile LIMIT 1`;
+    const existing = await prisma.storeProfile.findFirst();
 
-    if (existing.length > 0) {
-      await prisma.$executeRaw`
-        UPDATE StoreProfile 
-        SET businessName = ${businessName}, category = ${category}, isOnboarded = 1
-        WHERE id = ${existing[0].id}
-      `;
+    if (existing) {
+      await prisma.storeProfile.update({
+        where: { id: existing.id },
+        data: {
+          businessName,
+          category,
+          isOnboarded: true
+        }
+      });
+
       return NextResponse.json({ success: true, updated: true });
+
     } else {
-      const newId = Date.now().toString();
-      await prisma.$executeRaw`
-        INSERT INTO StoreProfile (id, businessName, category, isOnboarded, createdAt, updatedAt)
-        VALUES (${newId}, ${businessName}, ${category}, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-      `;
-      return NextResponse.json({ success: true, created: true }, { status: 201 });
+      await prisma.storeProfile.create({
+        data: {
+          businessName,
+          category,
+          isOnboarded: true
+        }
+      });
+
+      return NextResponse.json(
+        { success: true, created: true },
+        { status: 201 }
+      );
     }
+
   } catch (error) {
     console.error("POST /api/profile error:", error);
-    return NextResponse.json({ error: "Failed to save profile" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to save profile" },
+      { status: 500 }
+    );
   }
 }
 
@@ -52,7 +61,9 @@ export async function PUT(request: Request) {
     const { businessName } = await request.json();
     if (!businessName) return NextResponse.json({ error: "Missing name" }, { status: 400 });
     
-    await prisma.$executeRaw`UPDATE StoreProfile SET businessName = ${businessName}`;
+    await prisma.storeProfile.updateMany({
+      data: { businessName }
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("PUT /api/profile error:", error);
@@ -62,7 +73,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE() {
   try {
-    await prisma.$executeRaw`DELETE FROM StoreProfile`;
+    await prisma.storeProfile.deleteMany();;
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("DELETE /api/profile error:", error);
