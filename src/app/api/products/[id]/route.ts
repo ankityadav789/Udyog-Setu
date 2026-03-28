@@ -3,12 +3,13 @@ import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
+// ✅ PUT
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     if (!id) {
       return NextResponse.json({ error: "Missing product ID" }, { status: 400 });
@@ -26,19 +27,13 @@ export async function PUT(
       where: { id },
       data: {
         ...(name && { name }),
-
-        ...(price !== undefined && {
-          price: Number(price),
-        }),
-
+        ...(price !== undefined && { price: Number(price) }),
         ...(category && { category }),
-
         ...(stockQuantity !== undefined && {
           stockQuantity: Number(stockQuantity),
         }),
-
         ...(sku && sku.trim() !== "" && { sku: sku.trim() }),
-      }
+      },
     });
 
     return NextResponse.json(updated);
@@ -48,12 +43,13 @@ export async function PUT(
   }
 }
 
+// ✅ DELETE
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     if (!id) {
       return NextResponse.json({ error: "Missing product ID" }, { status: 400 });
@@ -64,7 +60,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    // ✅ ALWAYS SOFT DELETE (no hard delete)
     await prisma.product.update({
       where: { id },
       data: {
