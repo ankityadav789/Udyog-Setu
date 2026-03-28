@@ -7,30 +7,50 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const range = searchParams.get('range') || 'month'; // 'day', 'week', 'month'
 
-    // KPI: Total Overall Sales
-    const totalSalesAgg = await prisma.order.aggregate({
-      _sum: { finalAmount: true },
-    });
+    // KPI: Total Overall Sales & Orders Today (parallel execution)
+    const today = startOfDay(new Date());
+    const [totalSalesAgg, ordersToday] = await Promise.all([
+      prisma.order.aggregate({
+        _sum: { finalAmount: true },
+      }),
+      prisma.order.count({
+        where: { createdAt: { gte: today } }
+      })
+    ]);
     const totalSales = totalSalesAgg._sum.finalAmount || 0;
 
-    // KPI: Orders Today
-    const today = startOfDay(new Date());
-    const ordersToday = await prisma.order.count({
-      where: { createdAt: { gte: today } }
-    });
-
     // Chart: Sales Trend (last 7 days logic simplified)
+    // ✅ Proper date range handling
+    let startDate = startOfMonth(new Date());
+
+    if (range === 'day') {
+      startDate = startOfDay(new Date());
+    } else if (range === 'week') {
+      startDate = startOfWeek(new Date());
+    }
+
+    // ✅ Fetch all orders in range
     const recentOrders = await prisma.order.findMany({
-      take: 30, // Just taking last 30 for simplicity in this demo
-      orderBy: { createdAt: 'desc' },
+      where: {
+        createdAt: { gte: startDate }
+      },
       select: { createdAt: true, finalAmount: true }
     });
     
     // Grouping by date string
     const salesTrendMap: Record<string, number> = {};
+    const now = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD
+      salesTrendMap[dateStr] = 0;
+    }
+
     recentOrders.forEach((o: any) => {
-      const dateStr = o.createdAt.toISOString().split('T')[0];
-      salesTrendMap[dateStr] = (salesTrendMap[dateStr] || 0) + o.finalAmount;
+      const dateStr = o.createdAt.toISOString().split('T')[0]; // YYYY-MM-DD
+      if (salesTrendMap[dateStr] !== undefined) {
+        salesTrendMap[dateStr] += o.finalAmount;
+      }
     });
     
     const salesTrend = Object.keys(salesTrendMap).sort().map(date => ({
@@ -40,11 +60,17 @@ export async function GET(request: Request) {
 
     // Top Products
     const orderItems = await prisma.orderItem.findMany({
+        where: {
+    order: {
+      createdAt: { gte: startDate }
+    }
+  },
       include: { product: true }
     });
 
     const productSalesMap: Record<string, {name: string, sales: number, count: number}> = {};
     orderItems.forEach((item: any) => {
+      if (!item.product || item.product.name.startsWith('[DELETED]')) return;
       const pId = item.productId;
       if (!productSalesMap[pId]) {
         productSalesMap[pId] = { name: item.product.name, sales: 0, count: 0 };

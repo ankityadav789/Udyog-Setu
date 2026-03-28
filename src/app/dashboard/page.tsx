@@ -10,20 +10,46 @@ import {
 export default function Home() {
   const { t } = useLanguage();
   const [data, setData] = useState<any>(null);
+  const [insights, setInsights] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/dashboard')
-      .then(res => res.json())
-      .then(resData => {
-        setData(resData);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  let isMounted = true;
+
+  const loadData = async () => {
+    try {
+      const [resData, insightsData] = await Promise.all([
+        fetch(`/api/dashboard?t=${Date.now()}`, { cache: 'no-store' }),
+        fetch(`/api/insights?t=${Date.now()}`, { cache: 'no-store' })
+      ]);
+
+      if (!resData.ok || !insightsData.ok) {
+        throw new Error("API failed");
+      }
+
+      const dashboardJson = await resData.json();
+      const insightsJson = await insightsData.json();
+
+      if (!isMounted) return;
+
+      setData(dashboardJson);
+      if (Array.isArray(insightsJson)) setInsights(insightsJson);
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Dashboard fetch error:", err);
+      if (isMounted) setLoading(false); // ✅ FIX
+    }
+  };
+
+  loadData();
+  const intervalId = setInterval(loadData, 5000);
+
+  return () => {
+    isMounted = false;
+    clearInterval(intervalId);
+  };
+}, []);
 
   if (loading) {
     return <div style={{ padding: '2rem' }}>Loading Dashboard...</div>;
@@ -33,7 +59,9 @@ export default function Home() {
     return <div style={{ padding: '2rem', color: 'red' }}>Error loading dashboard data.</div>;
   }
 
-  const { kpi, salesTrend, topProducts } = data;
+  const kpi = data?.kpi || {};
+  const salesTrend = data?.salesTrend || [];
+  const topProducts = data?.topProducts || [];
 
   return (
     <div className={styles.container}>
@@ -43,11 +71,11 @@ export default function Home() {
       <div className={styles.kpiGrid}>
         <div className={styles.kpiCard}>
           <h3>{t("total_sales")}</h3>
-          <p>₹ {kpi.totalSales.toFixed(2)}</p>
+          <p>₹ {Number(kpi?.totalSales || 0).toFixed(2)}</p>
         </div>
         <div className={styles.kpiCard}>
           <h3>{t("orders_today")}</h3>
-          <p>{kpi.ordersToday}</p>
+          <p>{Number(kpi?.ordersToday || 0)}</p>
         </div>
       </div>
 
@@ -87,6 +115,38 @@ export default function Home() {
               </ResponsiveContainer>
             ) : (
               <div className={styles.noData}>{t('no_data')}</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* AI Smart Insights Area */}
+      <div className={styles.chartsGrid} style={{ marginTop: '1.5rem' }}>
+        <div className={styles.chartCard} style={{ gridColumn: 'span 2' }}>
+          <h3>AI Smart Insights & Alerts</h3>
+          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+            {insights.length > 0 ? insights.map((insight, idx) => {
+               // Dynamic subtle left-border coloring based on strings
+               let borderColor = '#3b82f6';
+               if (insight.includes('⚠️')) borderColor = '#ef4444';
+               else if (insight.includes('💡')) borderColor = '#f59e0b';
+               else if (insight.includes('📈')) borderColor = '#10b981';
+               
+               return (
+                <div key={idx} style={{ 
+                  padding: '1rem 1.2rem', 
+                  background: '#f8fafc', 
+                  borderLeft: `5px solid ${borderColor}`, 
+                  borderRadius: '6px', 
+                  fontSize: '1.05rem', 
+                  color: '#1e293b',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                }}>
+                  {insight}
+                </div>
+              );
+            }) : (
+              <p style={{ color: '#64748b' }}>Calculating diagnostics...</p>
             )}
           </div>
         </div>
