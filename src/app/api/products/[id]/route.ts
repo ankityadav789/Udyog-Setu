@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -38,29 +37,23 @@ export async function PUT(
           stockQuantity: Number(stockQuantity),
         }),
 
-        // ✅ SAFE SKU HANDLING (no null, no empty)
-        ...(sku !== undefined && {
-          sku: sku && sku.trim() !== "" ? sku.trim() : undefined
-        }),
+        ...(sku && sku.trim() !== "" && { sku: sku.trim() }),
       }
     });
 
     return NextResponse.json(updated);
   } catch (error) {
-    console.error("PUT /api/products/[id] error:", error);
-    return NextResponse.json(
-      { error: "Failed to update product" },
-      { status: 500 }
-    );
+    console.error("PUT error:", error);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params;
+    const { id } = params;
 
     if (!id) {
       return NextResponse.json({ error: "Missing product ID" }, { status: 400 });
@@ -83,10 +76,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("DELETE /api/products/[id] error:", error);
-    return NextResponse.json(
-      { error: "Failed to delete product" },
-      { status: 500 }
-    );
+    console.error("DELETE error:", error);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
